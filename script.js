@@ -1,4 +1,4 @@
-const API_KEY = TMDB_CONFIG.API_KEY;
+const API_KEY = "048fe421b4dd58a90d380f93aca7a4aa";
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
 const MAX_TMDB_PAGE = 500;
