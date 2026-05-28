@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CineSearch – Browse and discover popular movies, search by title, view ratings, and watch trailers instantly.">
+  <title>CineSearch – Movie Discovery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-badge">Now Playing &amp; Trending</div>
+    <h1>CineSearch</h1>
+    <p>Discover movies by title, explore ratings, and watch trailers — all in one place.</p>
+  </header>
+
+  <!-- MAIN -->
+  <main class="container">
+
+    <!-- Search -->
+    <form id="search-form" class="search-bar" role="search">
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Search for a movie..."
+        autocomplete="off"
+        aria-label="Search movies"
+      >
+      <button type="submit" aria-label="Submit search">Search</button>
+      <button type="button" id="filter-toggle" class="filter-toggle-btn" aria-expanded="false" aria-controls="filter-bar" title="Toggle filters">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+        <span>Filter</span>
+        <span class="filter-active-dot" id="filter-active-dot" hidden></span>
+      </button>
+    </form>
+
+    <!-- Filter Panel -->
+    <div class="filter-bar" id="filter-bar" aria-hidden="true">
+      <!-- Genre chips -->
+      <div class="filter-section">
+        <span class="filter-section-label">Genre</span>
+        <div class="genre-chips" id="genre-chips" role="group" aria-label="Filter by genre">
+          <button class="genre-chip active" data-genre-id="" type="button">All</button>
+        </div>
+      </div>
+
+      <!-- Industry / Region chips -->
+      <div class="filter-section">
+        <span class="filter-section-label">Industry / Region</span>
+        <div class="industry-chips" id="industry-chips" role="group" aria-label="Filter by film industry">
+          <button class="industry-chip active" data-lang="" type="button">🌍 All</button>
+          <button class="industry-chip" data-lang="en" type="button">🇺🇸 Hollywood</button>
+          <button class="industry-chip" data-lang="hi" type="button">🇮🇳 Bollywood</button>
+          <button class="industry-chip" data-lang="te" type="button">🎬 Tollywood</button>
+          <button class="industry-chip" data-lang="ta" type="button">🎬 Kollywood</button>
+          <button class="industry-chip" data-lang="ml" type="button">🎬 Mollywood</button>
+          <button class="industry-chip" data-lang="ko" type="button">🇰🇷 Korean</button>
+          <button class="industry-chip" data-lang="ja" type="button">🇯🇵 Japanese</button>
+          <button class="industry-chip" data-lang="fr" type="button">🇫🇷 French</button>
+          <button class="industry-chip" data-lang="es" type="button">🇪🇸 Spanish</button>
+        </div>
+      </div>
+      <div class="filter-selects-row">
+        <div class="filter-select-wrap">
+          <label for="sort-select" class="filter-select-label">Sort By</label>
+          <select id="sort-select" class="filter-select">
+            <option value="popularity.desc">🔥 Most Popular</option>
+            <option value="vote_average.desc">⭐ Top Rated</option>
+            <option value="release_date.desc">🆕 Newest</option>
+            <option value="release_date.asc">📅 Oldest</option>
+            <option value="revenue.desc">💰 Box Office</option>
+          </select>
+        </div>
+
+        <div class="filter-select-wrap">
+          <label for="year-select" class="filter-select-label">Year</label>
+          <select id="year-select" class="filter-select" aria-label="Filter by year">
+            <option value="">Any Year</option>
+          </select>
+        </div>
+
+        <div class="filter-select-wrap">
+          <label for="rating-select" class="filter-select-label">Min Rating</label>
+          <select id="rating-select" class="filter-select" aria-label="Minimum rating">
+            <option value="">Any Rating</option>
+            <option value="5">★ 5.0+</option>
+            <option value="6">★ 6.0+</option>
+            <option value="7">★ 7.0+</option>
+            <option value="7.5">★ 7.5+</option>
+            <option value="8">★ 8.0+</option>
+            <option value="9">★ 9.0+</option>
+          </select>
+        </div>
+
+        <button id="clear-filters" class="clear-filters-btn" type="button" hidden>✕ Clear All</button>
+      </div>
+    </div>
+
+    <!-- Label -->
+    <div class="section-label" id="results-label">Popular Right Now</div>
+
+    <!-- Grid -->
+    <section id="movies" class="movie-grid" aria-live="polite" aria-label="Movie results"></section>
+
+    <!-- Pagination -->
+    <nav class="pagination" aria-label="Page navigation">
+      <button id="prev-btn" type="button" aria-label="Previous page">← Prev</button>
+      <span id="page-info" aria-live="polite">Page 1</span>
+      <button id="next-btn" type="button" aria-label="Next page">Next →</button>
+    </nav>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Powered by <span>TMDB</span> &middot; Built with ♥</p>
+  </footer>
+
+  <!-- SCROLL TO TOP -->
+  <button id="scroll-top" aria-label="Scroll to top" title="Back to top">↑</button>
+
+  <!-- TRAILER MODAL -->
+  <div id="trailer-modal" class="trailer-modal" aria-hidden="true">
+    <div class="trailer-dialog" role="dialog" aria-modal="true" aria-labelledby="trailer-title">
+      <div class="trailer-header">
+        <h2 id="trailer-title" class="trailer-title">Trailer</h2>
+        <button id="close-trailer" class="close-trailer" type="button" aria-label="Close trailer">✕</button>
+      </div>
+      <div id="trailer-body" class="trailer-body"></div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
